@@ -289,6 +289,16 @@ impl EditboxState {
         self.selection = None;
     }
 
+    pub fn delete_range(&mut self, text: &mut String, range: (u32, u32)) {
+        self.redo_stack.clear();
+
+        let delete_command = DeleteRange::new(text, range);
+        delete_command.apply(&mut self.cursor, text);
+        self.undo_stack.push(Box::new(delete_command));
+
+        self.selection = None;
+    }
+
     pub fn delete_next_character(&mut self, text: &mut String) {
         self.redo_stack.clear();
 

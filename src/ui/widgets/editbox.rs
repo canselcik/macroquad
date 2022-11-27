@@ -79,6 +79,18 @@ impl<'a> Editbox<'a> {
             use KeyCode::*;
 
             match character {
+
+                InputCharacter {
+                    key: Key::Char('\u{7f}'),
+                    modifier_ctrl,
+                    ..
+                } => {
+                    // Backspace but better like DELETE but seems to have a bug
+                    let range = state.selection
+                        .map(|(sel_start, sel_end)| (sel_start+1, sel_end))
+                        .unwrap_or((state.cursor, state.cursor));
+                    state.delete_range(text, range);
+                }
                 InputCharacter {
                     key: Key::Char(_),
                     modifier_ctrl: true,
@@ -97,7 +109,9 @@ impl<'a> Editbox<'a> {
                         if state.selection.is_some() {
                             state.delete_selected(text);
                         }
-                        state.insert_character(text, character);
+                        if self.multiline || !character.is_control() {
+                            state.insert_character(text, character);
+                        }
                     }
                 }
                 InputCharacter {

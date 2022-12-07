@@ -103,6 +103,7 @@ impl<'a> Editbox<'a> {
                 } => {
                     if character != 13 as char
                         && character != 10 as char
+                        && character != 2 as char
                         && character.is_ascii()
                         && self.filter.as_ref().map_or(true, |f| f(character))
                     {

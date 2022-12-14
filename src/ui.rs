@@ -1129,6 +1129,8 @@ impl Ui {
         self.input_focus = Some(id);
     }
 
+    pub fn get_input_focus(&self) -> Option<Id> { self.input_focus }
+
     pub fn clear_input_focus(&mut self) {
         self.input_focus = None;
     }
